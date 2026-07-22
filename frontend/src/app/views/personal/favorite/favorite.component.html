@@ -1,0 +1,40 @@
+<div class="favorite">
+  <div class="container">
+    <div class="favorite-title">
+      Избранное
+    </div>
+    <div class="favorite-empty" *ngIf="!products || products.length === 0">
+      <div>В избранном нет товаров</div>
+      <button class="button" routerLink="/catalog">В каталог</button>
+    </div>
+    <div class="favorite-products" *ngIf="products && products.length > 0">
+      <div class="favorite-product" *ngFor="let product of products">
+        <div class="favorite-product-image" style="background-image: url({{serverStaticPath + product.image}})">
+        </div>
+        <div class="favorite-product-name">{{product.name}}</div>
+        <div class="favorite-product-price">{{product.price}} BYN</div>
+
+        <div class="favorite-product-action">
+          <ng-container *ngIf="getCount(product.id) === 0">
+            <button class="button" (click)="addToCart(product)">В корзину</button>
+          </ng-container>
+
+          <ng-container *ngIf="getCount(product.id) > 0">
+            <button class="button button-transparent button-in-cart" (click)="removeFromCart(product)">
+              <span>В корзине</span>
+              <span>Удалить</span>
+            </button>
+            <count-selector [count]="getCount(product.id)" (onCountChange)="updateCount(product, $event)"></count-selector>
+          </ng-container>
+        </div>
+
+        <div class="favorite-product-remove" (click)="removeFromFavorites(product.id)">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="1.93562" y1="2.6499" x2="13.9564" y2="14.6707" stroke="#A8ABA7" stroke-linecap="round" />
+            <line x1="13.9238" y1="2.62996" x2="1.90301" y2="14.6508" stroke="#A8ABA7" stroke-linecap="round" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
