@@ -53,21 +53,29 @@ export class HeaderComponent implements OnInit {
         }
       })
 
+    this.isLogged = this.authService.getIsLoggedIn();
+
+    if (this.isLogged) {
+      this.cartService.getCartCount().subscribe({
+        next: (data) => {
+          console.log('Initial cart count', data);
+        }
+      });
+    }
+
     this.authService.isLogged$.subscribe((isLoggedIn: boolean) => {
       this.isLogged = isLoggedIn;
+
+      if (isLoggedIn) {
+        this.cartService.getCartCount().subscribe();
+      } else {
+        this.cartService.setCount(0);
+      }
     });
 
-    this.cartService.getCartCount()
-      .subscribe((data: { count: number } | DefaultResponseType) => {
-        if ((data as DefaultResponseType).error !== undefined) {
-          throw new Error((data as DefaultResponseType).message);
-        }
-        this.count = (data as { count: number }).count;
-      });
-
-    this.cartService.count$.subscribe(count => {
+    this.cartService.countObservable.subscribe(count => {
       this.count = count;
-    })
+    });
   }
 
   logout() {

@@ -1,5 +1,12 @@
 @import "../../../../assets/styles/auth-form";
 
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+
 .login .container {
     display: flex;
 

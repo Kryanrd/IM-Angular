@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -26,7 +26,7 @@ export class CatalogComponent implements OnInit {
   categoriesWithTypes: CategoryWithTypeType[] = [];
   activePamams: ActiveParamsType = { types: [] };
   appliedFilters: AppliedFilterType[] = [];
-  sortingOpen = false;
+  sortingOpen: boolean = false;
   sortingOptions: { name: string, value: string }[] = [
     { name: 'От А до Я', value: 'az-asc' },
     { name: 'От Я до А', value: 'az-desc' },
@@ -201,22 +201,28 @@ export class CatalogComponent implements OnInit {
       queryParams: this.activePamams
     });
   }
-
   openPrevPage() {
-    if (this.activePamams.page && this.activePamams.page > 1) {
-      this.activePamams.page--;
-      this.router.navigate(['/catalog'], {
-        queryParams: this.activePamams
-      });
+    const currentPage = this.activePamams.page || 1;
+    if (currentPage > 1) {
+      this.activePamams.page = currentPage - 1;
+      this.router.navigate(['/catalog'], { queryParams: this.activePamams });
     }
   }
 
   openNextPage() {
-    if (this.activePamams.page && this.activePamams.page < this.pages.length) {
-      this.activePamams.page++;
-      this.router.navigate(['/catalog'], {
-        queryParams: this.activePamams
-      });
+    const currentPage = this.activePamams.page || 1;
+    if (currentPage < this.pages.length) {
+      this.activePamams.page = currentPage + 1;
+      this.router.navigate(['/catalog'], { queryParams: this.activePamams });
+    }
+  }
+  @ViewChild('sortingContainer') sortingContainer!: ElementRef<HTMLElement>;
+  @HostListener('document:click', ['$event'])
+  click(event: Event) {
+    if (this.sortingOpen) {
+      if (!this.sortingContainer?.nativeElement.contains((event.target as HTMLElement))) {
+        this.sortingOpen = false;
+      }
     }
   }
 

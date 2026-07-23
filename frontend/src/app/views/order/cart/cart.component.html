@@ -12,7 +12,7 @@
                         style="background-image: url({{serverStaticPath + cartProduct.product.image}})"></div>
                     <div class="cart-product-name">{{cartProduct.product.name}}</div>
                    <count-selector [count]="cartProduct.quantity" (onCountChange)="updateCount(cartProduct.product.id, $event)"></count-selector>
-                    <div class="cart-product-price">{{cartProduct.product.price}}</div>
+                    <div class="cart-product-price">{{cartProduct.product.price}} BYN</div>
                     <div class="cart-product-remove" (click)="updateCount(cartProduct.product.id, 0)">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_1_1332)">
